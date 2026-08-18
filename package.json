@@ -1,0 +1,36 @@
+{
+  "name": "to-do-list-ioredis",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "To-Do List application using Express, TypeScript, ioredis, and HTML/CSS/JS frontend",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "tsx watch src/server.ts"
+  },
+  "keywords": [
+    "redis",
+    "ioredis",
+    "typescript",
+    "express",
+    "todo"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "ioredis": "^5.4.1",
+    "uuid": "^10.0.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.14.9",
+    "@types/uuid": "^10.0.0",
+    "tsx": "^4.15.7",
+    "typescript": "^5.5.2"
+  }
+}

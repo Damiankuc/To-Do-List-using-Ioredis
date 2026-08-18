@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Aplicación de lista de tareas To-Do con Node.js, Express, TypeScript, ioredis y Redis DB.">
+  <title>Redis Task Manager - To-Do List</title>
+  <!-- Google Fonts: Outfit & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="background-glow"></div>
+  
+  <main class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo-group">
+        <div class="redis-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <div>
+          <h1>TaskFlow <span class="badge">ioredis</span></h1>
+          <p class="subtitle">Gestor de tareas en tiempo real respaldado por Redis</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- Create Task Form -->
+    <section class="card input-card">
+      <form id="taskForm" class="task-form">
+        <div class="input-wrapper">
+          <input 
+            type="text" 
+            id="taskInput" 
+            placeholder="¿Qué tarea deseas anotar hoy?..." 
+            autocomplete="off"
+            required
+          />
+          <button type="submit" id="addBtn" class="btn btn-primary">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            <span>Anotar Tarea</span>
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Control Bar & Stats -->
+    <section class="control-bar">
+      <div class="stats-group">
+        <div class="stat-pill">
+          <span class="stat-label">Total:</span>
+          <span id="totalCount" class="stat-value">0</span>
+        </div>
+        <div class="stat-pill stat-pending">
+          <span class="stat-label">Pendientes:</span>
+          <span id="pendingCount" class="stat-value">0</span>
+        </div>
+        <div class="stat-pill stat-completed">
+          <span class="stat-label">Realizadas:</span>
+          <span id="completedCount" class="stat-value">0</span>
+        </div>
+      </div>
+
+      <div class="filters-group">
+        <button class="filter-btn active" data-filter="all">Todas</button>
+        <button class="filter-btn" data-filter="pending">Pendientes</button>
+        <button class="filter-btn" data-filter="completed">Realizadas</button>
+      </div>
+    </section>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast hidden"></div>
+
+    <!-- Task List -->
+    <section class="card list-card">
+      <div id="loadingState" class="loading-state">
+        <div class="spinner"></div>
+        <p>Cargando tareas desde Redis...</p>
+      </div>
+
+      <ul id="taskList" class="task-list"></ul>
+
+      <div id="emptyState" class="empty-state hidden">
+        <div class="empty-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M8 12h8"></path>
+          </svg>
+        </div>
+        <h3>No hay tareas aquí</h3>
+        <p id="emptyMessage">¡Comienza agregando tu primera tarea arriba!</p>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <p>Desarrollado con <strong>TypeScript</strong>, <strong>Express</strong> y <strong>ioredis</strong></p>
+    </footer>
+  </main>
+
+  <!-- Script -->
+  <script src="app.js"></script>
+</body>
+</html>
