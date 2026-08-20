@@ -43,8 +43,7 @@ services:
       - "3001:3001"
     environment:
       - APP_INSTANCE=auto
-      - PORT=3001
-      - NGINX_ENVSUBST_FILTER=$$APP_INSTANCE $$PORT
+      - NGINX_ENVSUBST_FILTER=$$APP_INSTANCE
     depends_on:
       backend:
         condition: service_healthy
@@ -59,8 +58,7 @@ services:
       - "3002:3002"
     environment:
       - APP_INSTANCE=auto
-      - PORT=3002
-      - NGINX_ENVSUBST_FILTER=$$APP_INSTANCE $$PORT
+      - NGINX_ENVSUBST_FILTER=$$APP_INSTANCE
     depends_on:
       backend:
         condition: service_healthy

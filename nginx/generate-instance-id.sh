@@ -1,6 +1,13 @@
 #!/bin/sh
-# Si APP_INSTANCE no está definida o es "auto", generar un número aleatorio único de 4 dígitos (ej: Instancia #4829)
+# Generar un ID de 4 dígitos usando /dev/urandom para garantizar unicidad absoluta entre contenedores
 if [ -z "$APP_INSTANCE" ] || [ "$APP_INSTANCE" = "auto" ]; then
-    RAND_ID=$(awk 'BEGIN{srand(); print int(1000+rand()*9000)}')
-    export APP_INSTANCE="Instancia #$RAND_ID"
+    RAND_ID=$(tr -dc '1-9' < /dev/urandom | head -c 4)
+    APP_INSTANCE="Instancia #$RAND_ID"
 fi
+
+# Escribir el archivo instance.json para que Nginx lo sirva directamente en /instance
+cat <<EOF > /usr/share/nginx/html/instance.json
+{
+  "instance": "$APP_INSTANCE"
+}
+EOF
