@@ -66,5 +66,17 @@ services:
         condition: service_healthy
     restart: always
 
+  gateway:
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile.gateway
+    container_name: todo_gateway
+    ports:
+      - "3000:3000"
+    depends_on:
+      - frontend_app1
+      - frontend_app2
+    restart: always
+
 volumes:
   redis_data:

@@ -1,0 +1,8 @@
+FROM nginx:alpine
+
+# Copiar la configuración del Gateway con upstream backup
+COPY nginx/gateway.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 3000
+
+CMD ["nginx", "-g", "daemon off;"]
