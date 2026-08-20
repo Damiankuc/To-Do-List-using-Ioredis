@@ -13,6 +13,10 @@ app.use(express.urlencoded({ extended: true }));
 // Servir archivos estáticos del frontend desde la carpeta 'public'
 const publicPath = path.join(__dirname, '..', 'public');
 app.use(express.static(publicPath));
+// Endpoint de comprobación de salud (Healthcheck)
+app.get('/health', (_req, res) => {
+    res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
+});
 // Rutas de la API
 app.use('/', taskRoutes);
 // Ruta fallback para servir el index.html en cualquier otra ruta no reconocida

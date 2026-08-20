@@ -18,6 +18,11 @@ app.use(express.urlencoded({ extended: true }));
 const publicPath = path.join(__dirname, '..', 'public');
 app.use(express.static(publicPath));
 
+// Endpoint de comprobación de salud (Healthcheck)
+app.get('/health', (_req, res) => {
+  res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
+});
+
 // Rutas de la API
 app.use('/', taskRoutes);
 
