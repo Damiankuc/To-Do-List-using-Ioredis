@@ -1,12 +1,9 @@
 FROM nginx:alpine
 
-# Copiar configuración personalizada de Nginx
-COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
+# Copiar plantilla de Nginx para procesamiento dinámico de variables de entorno (envsubst)
+COPY nginx/nginx.conf.template /etc/nginx/templates/default.conf.template
 
 # Copiar archivos estáticos del frontend
 COPY public /usr/share/nginx/html
-
-# Exponer los dos puertos configurados para la app
-EXPOSE 3001 3002
 
 CMD ["nginx", "-g", "daemon off;"]

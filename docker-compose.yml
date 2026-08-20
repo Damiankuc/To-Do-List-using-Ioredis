@@ -34,14 +34,33 @@ services:
       retries: 5
     restart: always
 
-  frontend:
+  frontend_app1:
     build:
       context: .
       dockerfile: nginx/Dockerfile
-    container_name: todo_frontend
+    container_name: todo_frontend_app1
     ports:
       - "3001:3001"
+    environment:
+      - APP_INSTANCE=app1
+      - PORT=3001
+      - NGINX_ENVSUBST_FILTER=$$APP_INSTANCE $$PORT
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: always
+
+  frontend_app2:
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile
+    container_name: todo_frontend_app2
+    ports:
       - "3002:3002"
+    environment:
+      - APP_INSTANCE=app2
+      - PORT=3002
+      - NGINX_ENVSUBST_FILTER=$$APP_INSTANCE $$PORT
     depends_on:
       backend:
         condition: service_healthy

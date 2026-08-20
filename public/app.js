@@ -26,9 +26,26 @@ const filterBtns = document.querySelectorAll('.filter-btn');
 
 // Initialize App
 document.addEventListener('DOMContentLoaded', () => {
+  fetchInstanceInfo();
   fetchTasks();
   setupEventListeners();
 });
+
+/**
+ * Fetch current frontend instance environment variable (APP_INSTANCE)
+ */
+async function fetchInstanceInfo() {
+  try {
+    const res = await fetch('/instance');
+    const data = await res.json();
+    const welcomeBanner = document.getElementById('welcomeBanner');
+    if (welcomeBanner && data && data.instance) {
+      welcomeBanner.innerHTML = `Bienvenido a <strong>${escapeHTML(data.instance)}</strong>`;
+    }
+  } catch (error) {
+    console.error('Error fetching instance info:', error);
+  }
+}
 
 /**
  * Event Listeners Setup

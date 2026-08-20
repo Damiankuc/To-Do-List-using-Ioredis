@@ -11,31 +11,35 @@ Una aplicación web de lista de tareas (To-Do) moderna, modular y completa const
                         |  Cliente Web (Navegador)   |
                         +--------------+-------------+
                                        |
-                   +-------------------+-------------------+
-                   | (http://localhost:3001 | 3002)       |
-                   v                                       v
-         +---------------------------------------------------+
-         |             Nginx Reverse Proxy / Frontend       |
-         |         (Puertos expuestos: 3001 y 3002)          |
-         +-------------------------+-------------------------+
-                                   | (Reverse Proxy /task, /tasks)
-                                   v
-                         +-------------------+
-                         |  Backend Express  |
-                         |   (Puerto 5001)   |
-                         +---------+---------+
-                                   | (ioredis)
-                                   v
-                         +-------------------+
-                         |     Redis DB      |
-                         |   (Puerto 6379)   |
-                         +-------------------+
+                  +--------------------+--------------------+
+                  |                                         |
+                  v (http://localhost:3001)                 v (http://localhost:3002)
+        +----------------------------+            +----------------------------+
+        |   Nginx Frontend App 1     |            |   Nginx Frontend App 2     |
+        |   (APP_INSTANCE=app1)      |            |   (APP_INSTANCE=app2)      |
+        +-------------+--------------+            +-------------+--------------+
+                      |                                         |
+                      +-------------------+---------------------+
+                                          | (Reverse Proxy /task, /tasks)
+                                          v
+                                +-------------------+
+                                |  Backend Express  |
+                                |   (Puerto 5001)   |
+                                +---------+---------+
+                                          | (ioredis)
+                                          v
+                                +-------------------+
+                                |     Redis DB      |
+                                |   (Puerto 6379)   |
+                                +-------------------+
 ```
 
 - **Frontend**: HTML5, CSS3 (glassmorphism y microanimaciones), Vanilla JavaScript.
 - **Backend**: Node.js, Express, TypeScript (escuchando en el puerto **5001**).
 - **Base de Datos**: Redis (imagen `redis:alpine`) en memoria utilizando `ioredis`.
-- **Orquestación y Proxy**: Docker Compose con Nginx enrutando el tráfico hacia el contenedor backend y sirviendo la app en dos puertos distintos (**3001** y **3002**).
+- **Instancias de Frontend**:
+  - **`frontend_app1`**: Escucha en el puerto **3001** con la variable de entorno `APP_INSTANCE=app1`. Muestra **"Bienvenido a app1"**.
+  - **`frontend_app2`**: Escucha en el puerto **3002** con la variable de entorno `APP_INSTANCE=app2`. Muestra **"Bienvenido a app2"**.
 
 ---
 
@@ -43,11 +47,11 @@ Una aplicación web de lista de tareas (To-Do) moderna, modular y completa const
 
 ```
 To-Do-List-using-Ioredis/
-├── docker-compose.yml       # Orquestación de contenedores (Redis -> Backend -> Frontend/Nginx)
+├── docker-compose.yml       # Orquestación de contenedores (Redis -> Backend -> Frontend App1 & App2)
 ├── Dockerfile               # Dockerfile para el Backend en TypeScript (Puerto 5001)
 ├── nginx/
 │   ├── Dockerfile           # Dockerfile para el Frontend + Nginx Reverse Proxy
-│   └── nginx.conf           # Configuración Nginx escuchando en puertos 3001 y 3002
+│   └── nginx.conf.template  # Plantilla de Nginx procesada dinámicamente con envsubst ($APP_INSTANCE)
 ├── package.json             # Dependencias y scripts
 ├── tsconfig.json            # Configuración del compilador TypeScript
 ├── .env.example             # Variables de entorno de ejemplo
@@ -56,7 +60,7 @@ To-Do-List-using-Ioredis/
 ├── public/                  # Archivos estáticos del frontend
 │   ├── index.html           # Interfaz web principal
 │   ├── style.css            # Estilos CSS
-│   └── app.js               # Cliente JavaScript que consume la API REST
+│   └── app.js               # Cliente JavaScript que consume la API REST y /instance
 └── src/                     # Código fuente del Backend
     ├── server.ts            # Servidor HTTP en puerto 5001
     ├── app.ts               # Express, middlewares, healthcheck (/health) y rutas
@@ -89,15 +93,15 @@ To-Do-List-using-Ioredis/
 ## 🐳 Despliegue con Docker Compose
 
 La secuencia de inicio de los contenedores se ejecuta de forma ordenada mediante `healthcheck` y `depends_on`:
-**`Redis` → `Backend` → `Frontend (Nginx)`**
+**`Redis` → `Backend` → `Frontend App1` & `Frontend App2`**
 
 ### Comando de inicio:
 ```bash
 docker compose up --build
 ```
 
-### Puertos disponibles:
-- **App 1**: `http://localhost:3001`
-- **App 2**: `http://localhost:3002`
-- **Backend API REST**: `http://localhost:5001`
+### Puertos e Instancias disponibles:
+- **App 1**: [http://localhost:3001](http://localhost:3001) (Muestra *"Bienvenido a app1"*)
+- **App 2**: [http://localhost:3002](http://localhost:3002) (Muestra *"Bienvenido a app2"*)
+- **Backend API REST**: [http://localhost:5001](http://localhost:5001)
 - **Redis DB**: `localhost:6379`
