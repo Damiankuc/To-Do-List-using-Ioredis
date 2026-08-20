@@ -34,7 +34,7 @@ Una aplicación web de lista de tareas (To-Do) moderna, modular y completa const
 
 - **Frontend**: HTML5, CSS3 (glassmorphism y microanimaciones), Vanilla JavaScript.
 - **Backend**: Node.js, Express, TypeScript (escuchando en el puerto **5001**).
-- **Base de Datos**: Redis (imagen `redis:7-alpine`) en memoria utilizando `ioredis`.
+- **Base de Datos**: Redis (imagen `redis:alpine`) en memoria utilizando `ioredis`.
 - **Orquestación y Proxy**: Docker Compose con Nginx enrutando el tráfico hacia el contenedor backend y sirviendo la app en dos puertos distintos (**3001** y **3002**).
 
 ---
