@@ -42,7 +42,7 @@ services:
     ports:
       - "3001:3001"
     environment:
-      - APP_INSTANCE=app1
+      - APP_INSTANCE=auto
       - PORT=3001
       - NGINX_ENVSUBST_FILTER=$$APP_INSTANCE $$PORT
     depends_on:
@@ -58,7 +58,7 @@ services:
     ports:
       - "3002:3002"
     environment:
-      - APP_INSTANCE=app2
+      - APP_INSTANCE=auto
       - PORT=3002
       - NGINX_ENVSUBST_FILTER=$$APP_INSTANCE $$PORT
     depends_on:
